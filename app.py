@@ -59,13 +59,20 @@ def predict_creditscore(data:CreditScore):
                                       INSTAL_DAYS_ENTRY_PAYMENT_MEAN,
                                       DAYS_EMPLOYED,
                                       NAME_INCOME_TYPE_Working]])
-    if(prediction[0]>0.5):
-        prediction = "Credit default"
+    if FLAG_DOCUMENT_3!=0 and FLAG_DOCUMENT_3!=1:
+        return {"Error": "field must take value 0 (No) or 1 (Yes)"}
+    elif CODE_GENDER!=0 and CODE_GENDER!=1:
+        return {"Error": "field must take value 0 (Female) or 1 (Male)"}
+    elif NAME_INCOME_TYPE_Working!=0 and NAME_INCOME_TYPE_Working!=1:
+        return {"Error": "field must take value 0 (No) or 1 (Yes)"}
     else:
-        prediction = "Credit Reimbursed"
-    return {
-        'prediction': prediction,
-    }
+        if(prediction[0]>0.5):
+            prediction = "Credit default"
+        else:
+            prediction = "Credit Reimbursed"
+        return {
+            'prediction': prediction,
+        }
 
 # 5. Run the API with uvicorn
 #    Will run on http://127.0.0.1:8000
