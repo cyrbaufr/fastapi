@@ -9,14 +9,14 @@ import pandas as pd
 
 # 2. Create the app object
 app = FastAPI()
-pickle_in = open("classifier_final.pkl","rb")
+pickle_in = open("classifier_xgb_best.pkl","rb")
 classifier=pickle.load(pickle_in)
 
 def out_of_range(var_name, var_num,
                 msg=" field must take value 0 (No) or 1 (Yes)"):
     error_msg = var_name + " field must take value 0 (No) or 1 (Yes)"
     error = {"Error": error_msg}
-    if (var_num>1) or (var_num<0):
+    if (var_num<1) or (var_num>0):
         return error
 
 # 3. Index route, opens automatically on http://127.0.0.1:8000
@@ -31,19 +31,21 @@ def predict_creditscore(data:CreditScore):
     data = data.dict()
     EXT_SOURCE_3 = data['EXT_SOURCE_3']
     EXT_SOURCE_2 = data['EXT_SOURCE_2']
-    AMT_CREDIT = data['AMT_CREDIT']
-    FLAG_DOCUMENT_3 = data['FLAG_DOCUMENT_3']
-    out_of_range('FLAG_DOCUMENT_3', FLAG_DOCUMENT_3)
-    AMT_GOODS_PRICE = data['AMT_GOODS_PRICE']
+    PREV_DAYS_DECISION_MIN = data['PREV_DAYS_DECISION_MIN']
     CODE_GENDER = data['CODE_GENDER']
     out_of_range('CODE_GENDER', CODE_GENDER,
                  msg=" field must take value 0 (Female) or 1 (Male)")
-    INSTAL_DAYS_ENTRY_PAYMENT_MAX = data['INSTAL_DAYS_ENTRY_PAYMENT_MAX']
-    INSTAL_DAYS_ENTRY_PAYMENT_MEAN = data['INSTAL_DAYS_ENTRY_PAYMENT_MEAN']
     DAYS_EMPLOYED = data['DAYS_EMPLOYED']
-    NAME_INCOME_TYPE_Working = data['NAME_INCOME_TYPE_Working']
-    out_of_range('NAME_INCOME_TYPE_Working', NAME_INCOME_TYPE_Working)
-
+    PREV_APP_CREDIT_PERC_MIN = data['PREV_APP_CREDIT_PERC_MIN']
+    INSTAL_DPD_MAX = data['INSTAL_DPD_MAX']
+    AMT_CREDIT = data['AMT_CREDIT']
+    DAYS_BIRTH = data['DAYS_BIRTH']
+    FLAG_OWN_CAR = data['FLAG_OWN_CAR']
+    out_of_range('FLAG_OWN_CAR', FLAG_OWN_CAR,
+                msg=" field must take value 0 (No) or 1 (Yes)" )
+    NAME_EDUCATION_TYPE_Higher_education = data['NAME_EDUCATION_TYPE_Higher_education']
+    out_of_range('NAME_EDUCATION_TYPE_Higher_education', NAME_EDUCATION_TYPE_Higher_education,
+                msg=" field must take value 0 (No) or 1 (Yes)" )
 
     # print(classifier.predict([[EXT_SOURCE_3, EXT_SOURCE_2,
     #                            AMT_CREDIT, FLAG_DOCUMENT_3,
@@ -53,23 +55,23 @@ def predict_creditscore(data:CreditScore):
     #                            DAYS_EMPLOYED,
     #                            NAME_INCOME_TYPE_Working]]))
     prediction = classifier.predict([[EXT_SOURCE_3, EXT_SOURCE_2,
-                                      AMT_CREDIT, FLAG_DOCUMENT_3,
-                                      AMT_GOODS_PRICE, CODE_GENDER,
-                                      INSTAL_DAYS_ENTRY_PAYMENT_MAX,
-                                      INSTAL_DAYS_ENTRY_PAYMENT_MEAN,
-                                      DAYS_EMPLOYED,
-                                      NAME_INCOME_TYPE_Working]])
-    if FLAG_DOCUMENT_3!=0 and FLAG_DOCUMENT_3!=1:
-        return {"Error": "field must take value 0 (No) or 1 (Yes)"}
+                                      PREV_DAYS_DECISION_MIN, CODE_GENDER,
+                                      DAYS_EMPLOYED, PREV_APP_CREDIT_PERC_MIN,
+                                      INSTAL_DPD_MAX, AMT_CREDIT,
+                                      DAYS_BIRTH, FLAG_OWN_CAR,
+                                      NAME_EDUCATION_TYPE_Higher_education]])
+
+    if FLAG_OWN_CAR!=0 and FLAG_OWN_CAR!=1:
+        return {"Error": "field must take integer value 0 (No) or 1 (Yes)"}
     elif CODE_GENDER!=0 and CODE_GENDER!=1:
-        return {"Error": "field must take value 0 (Female) or 1 (Male)"}
-    elif NAME_INCOME_TYPE_Working!=0 and NAME_INCOME_TYPE_Working!=1:
+        return {"Error": "field must take integer value 0 (Female) or 1 (Male)"}
+    elif NAME_EDUCATION_TYPE_Higher_education!=0 and NAME_EDUCATION_TYPE_Higher_education!=1:
         return {"Error": "field must take value 0 (No) or 1 (Yes)"}
     else:
         if(prediction[0]>0.5):
-            prediction = "Credit default"
+            prediction = "Crédit refusé"
         else:
-            prediction = "Credit Reimbursed"
+            prediction = "Crédit accepté"
         return {
             'prediction': prediction,
         }
