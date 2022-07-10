@@ -14,7 +14,7 @@ L'intégralité du code source du projet est également disponible ici:
 https://github.com/cyrbaufr/projet7_oc
 
 # Utiliser l'application
-Un exemple d'utilisation de l'API est disponible dans le notebook suivant:
-https://github.com/cyrbaufr/projet7_oc/blob/master/phase5_streamlit/baudrillart_cyril_14_api_calls.ipynb
-La documentation FastAPI de l'application est également disponible ici:
+Un exemple d'utilisation de l'API est disponible dans le notebook suivant:  
+https://github.com/cyrbaufr/projet7_oc/blob/master/phase5_streamlit/baudrillart_cyril_14_api_calls.ipynb  
+La documentation FastAPI de l'application est également disponible ici:  
 https://test-cyril-fastapi.herokuapp.com/docs
