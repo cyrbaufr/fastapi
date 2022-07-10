@@ -8,9 +8,9 @@ Elle a été déployée avec Heroku et est accessible à l'adresse suivante:
 https://test-cyril-fastapi.herokuapp.com/
 
 # Code source
-Le code source de l'application est disponible sur github à l'adresse suivante:
-https://github.com/cyrbaufr/fastapi
-L'intégralité du code source du projet est également disponible ici:
+Le code source de l'application est disponible sur github à l'adresse suivante:  
+https://github.com/cyrbaufr/fastapi  
+L'intégralité du code source du projet est également disponible ici:  
 https://github.com/cyrbaufr/projet7_oc
 
 # Utiliser l'application
